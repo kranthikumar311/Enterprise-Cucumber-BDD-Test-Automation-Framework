@@ -1,4 +1,0 @@
-welcome to the world of GIT
->> Learning the pull request.
-New changes to the GIT
-someone suggested changes

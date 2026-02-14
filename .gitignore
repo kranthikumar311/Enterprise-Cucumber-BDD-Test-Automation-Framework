@@ -1,0 +1,12 @@
+# Ignore the Maven build output
+/target/
+
+# Ignore Eclipse-specific files
+.settings/
+.project
+.classpath
+bin/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db

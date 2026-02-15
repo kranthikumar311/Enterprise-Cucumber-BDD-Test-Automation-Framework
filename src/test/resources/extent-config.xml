@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+    <configuration>
+        <!-- Report Theme: STANDARD or DARK -->
+        <theme>STANDARD</theme>
+
+        <!-- Document encoding -->
+        <encoding>UTF-8</encoding>
+
+        <!-- Protocol for report resources -->
+        <protocol>https</protocol>
+
+        <!-- Report title shown in browser tab -->
+        <documentTitle>Automation Test Report</documentTitle>
+
+        <!-- Report name shown inside the report -->
+        <reportName>Enterprise Cucumber BDD Test Report</reportName>
+
+        <!-- Timestamp format -->
+        <timeStampFormat>MMM dd, yyyy HH:mm:ss</timeStampFormat>
+    </configuration>
+</extentreports>

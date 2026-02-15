@@ -1,6 +1,8 @@
 package com.enterprise.driver;
 
 import java.time.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -12,25 +14,24 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DriverManager {
 
-    // ThreadLocal gives each thread its own WebDriver instance
+    private static final Logger logger = LogManager.getLogger(DriverManager.class);
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    // Private constructor — no one can create an instance of this class
-    private DriverManager() 
-    {
+    private DriverManager() {
     }
 
-    // Returns the WebDriver for the current thread
     public static WebDriver getDriver() {
         return driver.get();
     }
 
-    // Creates a new WebDriver based on browser name
     public static void initDriver(String browser, boolean headless) {
 
         if (driver.get() != null) {
-            return; // Driver already exists for this thread
+            logger.warn("Driver already exists for this thread. Skipping initialization.");
+            return;
         }
+
+        logger.info("Initializing {} browser (headless: {})", browser, headless);
 
         WebDriver webDriver;
 
@@ -67,23 +68,25 @@ public class DriverManager {
                 break;
 
             default:
+                logger.error("Browser not supported: {}", browser);
                 throw new IllegalArgumentException("Browser not supported: " + browser);
         }
 
-        // Set global timeouts
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
 
-        // Store in ThreadLocal
         driver.set(webDriver);
+        logger.info("{} browser launched successfully", browser);
     }
 
-    // Closes the browser and removes the driver from ThreadLocal
-    public static void quitDriver()
-    {
+    public static void quitDriver() {
         if (driver.get() != null) {
+            logger.info("Closing browser and cleaning up driver");
             driver.get().quit();
-            driver.remove();  // Important: prevents memory leaks
+            driver.remove();
+            logger.debug("ThreadLocal driver removed");
+        } else {
+            logger.warn("No driver found to quit for this thread");
         }
     }
 }

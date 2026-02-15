@@ -11,7 +11,11 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.enterprise.stepdefinitions,com.enterprise.hooks")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty, html:target/HtmlReports/report.html")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME,
+    value = "pretty, " +
+            "html:target/CucumberReports/CucumberReport.html, " +
+            "json:target/CucumberReports/cucumber.json, " +
+            "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:")
 @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@smoketest")
 public class TestRunner {
 }

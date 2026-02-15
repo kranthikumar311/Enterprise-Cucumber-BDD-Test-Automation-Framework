@@ -1,0 +1,116 @@
+name: Cucumber Test Automation
+
+# When to run
+on:
+  # Run on push to main or develop branches
+  push:
+    branches: [ main, develop ]
+  # Run on pull requests to main
+  pull_request:
+    branches: [ main ]
+  # Allow manual trigger with parameters
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Test environment'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - qa
+          - staging
+      browser:
+        description: 'Browser'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - edge
+      profile:
+        description: 'Test suite'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - sanity
+          - critical
+          - all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Java 17
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # Step 3: Setup Chrome browser
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 'stable'
+
+      # Step 4: Run tests
+      - name: Run Tests
+        run: |
+          mvn clean test \
+            -P${{ github.event.inputs.profile || 'smoke' }} \
+            -Denv=${{ github.event.inputs.environment || 'qa' }} \
+            -Dbrowser=${{ github.event.inputs.browser || 'chrome' }} \
+            -Dheadless=true
+        continue-on-error: true
+
+      # Step 5: Upload ExtentReport
+      - name: Upload Extent Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: target/ExtentReports/
+
+      # Step 6: Upload Cucumber Report
+      - name: Upload Cucumber Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: target/CucumberReports/
+
+      # Step 7: Upload Screenshots
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: target/screenshots/
+          if-no-files-found: ignore
+
+      # Step 8: Upload Logs
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: target/logs/
+
+      # Step 9: Publish Test Summary
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment: ${{ github.event.inputs.environment || 'qa' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Browser: ${{ github.event.inputs.browser || 'chrome' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Profile: ${{ github.event.inputs.profile || 'smoke' }}" >> $GITHUB_STEP_SUMMARY

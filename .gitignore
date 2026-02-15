@@ -1,12 +1,65 @@
-# Ignore the Maven build output
-/target/
+# ===================== Compiled Files =====================
+target/
+*.class
+*.jar
+*.war
+*.ear
 
-# Ignore Eclipse-specific files
-.settings/
+# ===================== IDE — Eclipse =====================
 .project
 .classpath
+.settings/
+.metadata/
 bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+local.properties
 
-# Ignore OS-specific files
+# ===================== IDE — IntelliJ =====================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ===================== IDE — VS Code =====================
+.vscode/
+
+# ===================== Maven =====================
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ===================== Test Outputs =====================
+target/ExtentReports/
+target/CucumberReports/
+target/HtmlReports/
+target/screenshots/
+target/logs/
+target/surefire-reports/
+test-output/
+
+# ===================== Logs =====================
+*.log
+logs/
+
+# ===================== OS Files =====================
 .DS_Store
+.DS_Store?
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ===================== Driver Executables =====================
+*.exe
+chromedriver
+geckodriver
+msedgedriver

@@ -12,6 +12,9 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<cucumber.version>7.18.1</cucumber.version>
 		<selenium.version>4.25.0</selenium.version>
+		<env>qa</env>
+		<browser>chrome</browser>
+		<cucumber.filter.tags>@smoke</cucumber.filter.tags>
 	</properties>
 
 	<dependencies>
@@ -77,6 +80,12 @@
 	</dependencies>
 
 	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -88,6 +97,11 @@
 							cucumber.junit-platform.naming-strategy=long
 						</configurationParameters>
 					</properties>
+					<!-- Allow system properties to be passed from command line -->
+					<systemPropertyVariables>
+						<env>${env}</env>
+						<browser>${browser}</browser>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -101,4 +115,61 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<!-- Smoke Test Profile -->
+		<profile>
+			<id>smoke</id>
+			<properties>
+				<cucumber.filter.tags>@smoke</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Regression Test Profile -->
+		<profile>
+			<id>regression</id>
+			<properties>
+				<cucumber.filter.tags>@regression</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Sanity Test Profile -->
+		<profile>
+			<id>sanity</id>
+			<properties>
+				<cucumber.filter.tags>@sanity</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Critical Tests Only -->
+		<profile>
+			<id>critical</id>
+			<properties>
+				<cucumber.filter.tags>@critical</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Login Feature Tests -->
+		<profile>
+			<id>login</id>
+			<properties>
+				<cucumber.filter.tags>@login</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Search Feature Tests -->
+		<profile>
+			<id>search</id>
+			<properties>
+				<cucumber.filter.tags>@search</cucumber.filter.tags>
+			</properties>
+		</profile>
+
+		<!-- Run All Tests -->
+		<profile>
+			<id>all</id>
+			<properties>
+				<cucumber.filter.tags>@smoke or @regression or @sanity</cucumber.filter.tags>
+			</properties>
+		</profile>
+	</profiles>
 </project>

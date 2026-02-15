@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_DIR">target/logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console Output -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Log File — creates a new file each run -->
+        <File name="FileLog" fileName="${LOG_DIR}/test-execution.log" append="false">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </File>
+
+        <!-- Rolling File — archives old logs automatically -->
+        <RollingFile name="RollingFileLog"
+                     fileName="${LOG_DIR}/test-rolling.log"
+                     filePattern="${LOG_DIR}/archive/test-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- Framework logger — set to DEBUG for detailed output -->
+        <Logger name="com.enterprise" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLog"/>
+            <AppenderRef ref="RollingFileLog"/>
+        </Logger>
+
+        <!-- Selenium/WebDriver — set to WARN to reduce noise -->
+        <Logger name="org.openqa.selenium" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLog"/>
+        </Logger>
+
+        <!-- Root logger — catches everything else -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLog"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

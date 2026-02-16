@@ -11,7 +11,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import io.github.bonigarcia.wdm.WebDriverManager;
-//Driver Class
+
 public class DriverManager {
 
     private static final Logger logger = LogManager.getLogger(DriverManager.class);

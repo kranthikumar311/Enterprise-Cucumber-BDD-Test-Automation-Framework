@@ -44,16 +44,14 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Run Tests
-        # Added 'continue-on-error' so the job proceeds to upload reports
-        # even if a test failure returns Exit Code 1.
-        run: |
-          mvn clean test \
-            -P${{ github.event.inputs.profile || 'smoke' }} \
-            -Denv=${{ github.event.inputs.environment || 'qa' }} \
-            -Dbrowser=${{ github.event.inputs.browser || 'chrome' }} \
-            -Dheadless=true
-        continue-on-error: true 
+		- name: Run Tests
+		        run: |
+		          mvn clean test \
+		            -P${{ github.event.inputs.profile || 'smoke' }} \
+		            -Denv=${{ github.event.inputs.environment || 'qa' }} \
+		            -Dbrowser=${{ github.event.inputs.browser || 'chrome' }} \
+		            -Dheadless=true
+		        continue-on-error: true
 
       - name: Upload Extent Report
         if: always() # CRITICAL: This runs even if tests fail

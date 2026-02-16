@@ -2,7 +2,7 @@ name: Cucumber Test Automation
 
 on:
   push:
-    branches: [ main, develop ] # Triggers on your newly renamed 'main' branch
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -44,21 +44,17 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
-		- name: Run Tests
-		        run: |
-		          mvn clean test \
-		            -P${{ github.event.inputs.profile || 'smoke' }} \
-		            -Denv=${{ github.event.inputs.environment || 'qa' }} \
-		            -Dbrowser=${{ github.event.inputs.browser || 'chrome' }} \
-		            -Dheadless=true
-		        continue-on-error: true
+      - name: Run Tests
+        run: mvn clean test -P${{ github.event.inputs.profile || 'smoke' }} -Denv=${{ github.event.inputs.environment || 'qa' }} -Dbrowser=${{ github.event.inputs.browser || 'chrome' }} -Dheadless=true
+        continue-on-error: true
 
       - name: Upload Extent Report
-        if: always() # CRITICAL: This runs even if tests fail
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: extent-report
           path: target/ExtentReports/
+          if-no-files-found: ignore
 
       - name: Upload Cucumber Report
         if: always()
@@ -66,6 +62,7 @@ jobs:
         with:
           name: cucumber-report
           path: target/CucumberReports/
+          if-no-files-found: ignore
 
       - name: Upload Logs
         if: always()
@@ -73,3 +70,4 @@ jobs:
         with:
           name: test-logs
           path: target/logs/
+          if-no-files-found: ignore

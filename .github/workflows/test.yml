@@ -45,8 +45,8 @@ jobs:
         uses: browser-actions/setup-chrome@v1
 
       - name: Run Tests
-        # 'continue-on-error' ensures the pipeline proceeds to the upload steps 
-        # even if Maven returns exit code 1 due to failed tests.
+        # Added 'continue-on-error' so the job proceeds to upload reports
+        # even if a test failure returns Exit Code 1.
         run: |
           mvn clean test \
             -P${{ github.event.inputs.profile || 'smoke' }} \
@@ -56,7 +56,7 @@ jobs:
         continue-on-error: true 
 
       - name: Upload Extent Report
-        if: always() # This is critical: it runs even if the 'Run Tests' step failed
+        if: always() # CRITICAL: This runs even if tests fail
         uses: actions/upload-artifact@v4
         with:
           name: extent-report

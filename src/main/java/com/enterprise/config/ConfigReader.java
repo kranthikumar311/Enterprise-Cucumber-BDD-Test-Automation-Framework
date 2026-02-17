@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+//This is config file
 public class ConfigReader {
 
     private static final Logger logger = LogManager.getLogger(ConfigReader.class);

@@ -45,6 +45,9 @@ public class DriverManager {
                 chromeOptions.addArguments("--start-maximized");
                 chromeOptions.addArguments("--disable-notifications");
                 chromeOptions.addArguments("--remote-allow-origins=*");
+             // ADD THESE TWO LINES FOR DOCKER COMPATIBILITY:
+                chromeOptions.addArguments("--no-sandbox"); 
+                chromeOptions.addArguments("--disable-dev-shm-usage");
                 webDriver = new ChromeDriver(chromeOptions);
                 break;
 

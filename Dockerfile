@@ -25,7 +25,6 @@ RUN mvn dependency:resolve
 # Set timezone to MST
 RUN ln -sf /usr/share/zoneinfo/America/Denver /etc/localtime && echo "America/Denver" > /etc/timezone
 
-
 # Default command — run smoke tests headless
 ENTRYPOINT ["mvn", "clean", "test"]
 CMD ["-Psmoke", "-Denv=qa", "-Dbrowser=chrome", "-Dheadless=true"]
